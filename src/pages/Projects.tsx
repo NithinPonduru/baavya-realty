@@ -14,6 +14,38 @@ interface Project {
   status?: string;
 }
 
+type BrochureEntry = {
+  fileName: string;
+  normalizedFileName: string;
+  url: string;
+};
+
+const brochureFiles: BrochureEntry[] = Object.entries(
+  import.meta.glob("/pdfs/*.pdf", {
+    eager: true,
+    import: "default"
+  })
+).map(([filePath, fileUrl]) => {
+  const fileName = filePath.split("/").pop() ?? "";
+  return {
+    fileName,
+    normalizedFileName: normalizeText(fileName.replace(/\.pdf$/i, "")),
+    url: fileUrl as string
+  };
+});
+
+function normalizeText(value: string) {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, "");
+}
+
+function findBrochureByProjectName(projectTitle: string) {
+  const normalizedProjectName = normalizeText(projectTitle);
+  return brochureFiles.find((brochure) =>
+    brochure.normalizedFileName.includes(normalizedProjectName) ||
+    normalizedProjectName.includes(brochure.normalizedFileName)
+  ) ?? null;
+}
+
 const projects: Project[] = [
   // APARTMENTS
   {
@@ -261,10 +293,27 @@ export function Projects() {
     ? projects 
     : projects.filter(p => p.type === activeFilter);
 
+  const downloadBrochureForProject = (project: Project) => {
+    const brochure = findBrochureByProjectName(project.title);
+
+    if (!brochure) {
+      alert(`No brochure file found for ${project.title}.`);
+      return;
+    }
+
+    const link = document.createElement("a");
+    link.href = brochure.url;
+    link.download = brochure.fileName;
+    link.rel = "noopener";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  };
+
   const handleDownloadClick = (e: React.MouseEvent, project: Project) => {
     e.preventDefault();
     if (hasDownloaded) {
-      alert(`Downloading brochure for ${project.title}...`);
+      downloadBrochureForProject(project);
     } else {
       setSelectedProject(project);
       setShowPopup(true);
@@ -289,7 +338,9 @@ export function Projects() {
     setShowPopup(false);
 
     setTimeout(() => {
-      alert(`Downloading brochure for ${selectedProject?.title}...`);
+      if (selectedProject) {
+        downloadBrochureForProject(selectedProject);
+      }
     }, 1000);
   };
 

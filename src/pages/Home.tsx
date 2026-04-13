@@ -27,8 +27,7 @@ export function Home() {
               transition={{ duration: 0.6 }}
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 mb-6 md:mb-8 shadow-xl"
             >
-              <Sparkles className="w-4 h-4 text-teal-400" />
-              <span className="text-white/90 text-xs md:text-sm font-medium">Building Dreams Since 2020</span>
+              <span className="text-white/90 text-xs md:text-sm font-medium">Building Dreams Since 2021</span>
             </motion.div>
             
             <motion.h1 
