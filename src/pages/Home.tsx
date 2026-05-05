@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { ArrowRight, Building, Home as HomeIcon, Map, Briefcase, Sparkles, MapPin } from "lucide-react";
+import { ArrowRight, Building, Home as HomeIcon, Map, Briefcase, Sparkles, MapPin, ShieldCheck, ClipboardList, HandHelping, TrendingUp } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export function Home() {
@@ -11,12 +11,11 @@ export function Home() {
           <img 
             alt="Luxury Property" 
             className="w-full h-full object-cover" 
-            src="https://images.unsplash.com/photo-1531971589569-0d9370cbe1e5?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA4Mzl8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjByZWFsJTIwZXN0YXRlfGVufDB8fHx8MTc3NDcxNTkxMXww&ixlib=rb-4.1.0&q=85" 
-            referrerPolicy="no-referrer"
+            src="/hero-realestate.png"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-teal-900/95 via-cyan-900/90 to-blue-900/85"></div>
           <div className="absolute top-20 left-10 w-72 h-72 bg-teal-500/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+
         </div>
         
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
@@ -64,7 +63,8 @@ export function Home() {
               transition={{ duration: 0.6, delay: 0.4 }}
               className="text-base md:text-lg text-cyan-50/90 mb-10 md:mb-12 max-w-2xl leading-relaxed"
             >
-              Expert real estate advisory and infrastructure development services. Led by young visionary <span className="font-semibold text-white">SATHARLA BHANU PRAKASH REDDY</span>, we're transforming Hyderabad's property landscape with innovation and integrity.
+              Led by young visionary, <span className="font-semibold text-white">Satharla Bhanu Prakash Reddy</span> — Real-estate advisory and infrastructure-focused opportunities, helping clients make informed property decisions through verified deals, market insight & professional execution.{" "}
+              <span className="block mt-2">Follow us on our social media handles for all the latest updates, deals and news.</span>
             </motion.p>
             
             <motion.div 
@@ -119,6 +119,83 @@ export function Home() {
         </div>
       </section>
 
+      {/* Why Choose Us */}
+      <section id="why-choose-us" className="py-24 bg-white overflow-hidden">
+        <div className="container mx-auto px-6 md:px-12">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+            className="text-center max-w-3xl mx-auto mb-16"
+          >
+            <h2 className="text-2xl md:text-4xl font-serif text-gray-900 mb-4">Why Choose Us</h2>
+            <div className="w-12 h-0.5 bg-primary mx-auto rounded-full mt-1" />
+          </motion.div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            {[
+              {
+                icon: <Sparkles size={28} />,
+                title: "Best Value Guaranteed",
+                desc: "Maximum return on every rupee invested — we ensure your money works harder for you.",
+              },
+              {
+                icon: <ShieldCheck size={28} />,
+                title: "Trusted & Transparent Advisory",
+                desc: "Honest guidance with full legal clarity and due diligence at every step.",
+              },
+              {
+                icon: <MapPin size={28} />,
+                title: "Deep Local Market Expertise",
+                desc: "Years of on-ground knowledge of Hyderabad's most promising real estate corridors.",
+              },
+              {
+                icon: <ClipboardList size={28} />,
+                title: "Tailored Property Solutions",
+                desc: "Customized recommendations that match your budget, timeline, and investment goals.",
+              },
+              {
+                icon: <HandHelping size={28} />,
+                title: "Complete Buying Assistance",
+                desc: "End-to-end support — from site visits and negotiations to documentation and possession.",
+              },
+              {
+                icon: <TrendingUp size={28} />,
+                title: "Exclusive Investment Opportunities",
+                desc: "Access to pre-launch deals and off-market properties not available elsewhere.",
+              },
+            ].map((item, index) => (
+              <div
+                key={index}
+                className="group bg-white border border-gray-200 rounded-2xl p-8 hover:border-l-4 hover:border-l-primary hover:shadow-lg transition-all duration-300"
+              >
+                <div className="w-12 h-12 rounded-xl bg-teal-50 flex items-center justify-center text-primary mb-5 group-hover:scale-110 transition-transform duration-300">
+                  {item.icon}
+                </div>
+                <h4 className="text-base font-semibold text-gray-900 mb-2">{item.title}</h4>
+                <p className="text-gray-500 text-sm leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Quote Banner */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="flex items-center justify-center gap-4 py-8 px-8 rounded-2xl bg-gray-50 border border-gray-200"
+          >
+            <span className="w-8 h-px bg-primary rounded-full flex-shrink-0" />
+            <p className="text-base text-gray-600 font-light leading-relaxed text-center">
+              Smart investments begin with the right guidance.
+            </p>
+            <span className="w-8 h-px bg-primary rounded-full flex-shrink-0" />
+          </motion.div>
+        </div>
+      </section>
+
       {/* Expertise / Project Types */}
       <section id="services" className="py-24 bg-gray-50 overflow-hidden">
         <div className="container mx-auto px-6 md:px-12">
@@ -135,25 +212,22 @@ export function Home() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-              { icon: <HomeIcon size={32} />, title: "Villas", desc: "Luxury independent homes with premium amenities." },
-              { icon: <Building size={32} />, title: "Apartments", desc: "Modern high-rise living spaces in prime locations." },
-              { icon: <Briefcase size={32} />, title: "Commercial", desc: "Strategic business spaces and retail environments." },
-              { icon: <Map size={32} />, title: "Other Projects", desc: "Land development and infrastructure investments." }
+              { icon: <HomeIcon size={32} />, title: "Villas", desc: "Luxury independent homes with premium amenities.", filter: "Villas" },
+              { icon: <Building size={32} />, title: "Apartments", desc: "Modern high-rise living spaces in prime locations.", filter: "Apartments" },
+              { icon: <Briefcase size={32} />, title: "Commercial", desc: "Strategic business spaces and retail environments.", filter: "Commercial" },
+              { icon: <Map size={32} />, title: "Other Projects", desc: "Land development and infrastructure investments.", filter: "All" }
             ].map((item, index) => (
-              <motion.div 
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-white p-10 border border-gray-200 hover:border-primary/50 hover:shadow-xl transition-all duration-300 group rounded-2xl"
-              >
-                <div className="text-primary mb-6 group-hover:scale-110 transition-transform duration-300 origin-left">
-                  {item.icon}
+              <Link to={`/projects?type=${item.filter}`} key={index} className="block">
+                <div
+                  className="bg-white p-10 border border-gray-200 hover:border-primary/50 hover:shadow-xl transition-all duration-300 group rounded-2xl cursor-pointer"
+                >
+                  <div className="text-primary mb-6 group-hover:scale-110 transition-transform duration-300 origin-left">
+                    {item.icon}
+                  </div>
+                  <h4 className="text-xl font-serif text-gray-900 mb-4">{item.title}</h4>
+                  <p className="text-gray-600 text-sm leading-relaxed">{item.desc}</p>
                 </div>
-                <h4 className="text-xl font-serif text-gray-900 mb-4">{item.title}</h4>
-                <p className="text-gray-600 text-sm leading-relaxed">{item.desc}</p>
-              </motion.div>
+              </Link>
             ))}
           </div>
         </div>

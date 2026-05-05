@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home as HomeIcon, Building, Phone } from "lucide-react";
+import { Home as HomeIcon, Building, Phone, Gift } from "lucide-react";
 import { useState, useEffect } from "react";
 import { cn } from "../lib/utils";
 
@@ -18,7 +18,7 @@ export function Navbar() {
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "Projects", path: "/projects" },
-    { name: "Contact", path: "/contact" },
+    { name: "Referral", path: "/referral" },
   ];
 
   return (
@@ -74,6 +74,10 @@ export function Navbar() {
           <Link to="/projects" className={cn("flex flex-col items-center p-2 transition-colors", location.pathname === '/projects' ? "text-primary" : "text-gray-500 hover:text-gray-900")}>
             <Building size={24} strokeWidth={location.pathname === '/projects' ? 2.5 : 2} />
             <span className="text-[10px] font-semibold mt-1">Projects</span>
+          </Link>
+          <Link to="/referral" className={cn("flex flex-col items-center p-2 transition-colors", location.pathname === '/referral' ? "text-primary" : "text-gray-500 hover:text-gray-900")}>
+            <Gift size={24} strokeWidth={location.pathname === '/referral' ? 2.5 : 2} />
+            <span className="text-[10px] font-semibold mt-1">Referral</span>
           </Link>
           <Link to="/contact" className={cn("flex flex-col items-center p-2 transition-colors", location.pathname === '/contact' ? "text-primary" : "text-gray-500 hover:text-gray-900")}>
             <Phone size={24} strokeWidth={location.pathname === '/contact' ? 2.5 : 2} />

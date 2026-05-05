@@ -10,6 +10,7 @@ import { Footer } from "./components/Footer";
 import { Home } from "./pages/Home";
 import { Projects } from "./pages/Projects";
 import { Contact } from "./pages/Contact";
+import { Referral } from "./pages/Referral";
 
 function ScrollToHash() {
   const { pathname, hash } = useLocation();
@@ -23,7 +24,7 @@ function ScrollToHash() {
         }, 100);
       }
     } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: 'instant' });
     }
   }, [pathname, hash]);
 
@@ -41,6 +42,7 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/projects" element={<Projects />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/referral" element={<Referral />} />
           </Routes>
         </main>
         <Footer />

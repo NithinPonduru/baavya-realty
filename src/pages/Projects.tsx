@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { motion } from "motion/react";
 import { Download, MapPin, CheckCircle2, CalendarDays, X } from "lucide-react";
 
@@ -10,40 +11,22 @@ interface Project {
   type: ProjectType;
   location: string;
   image: string;
+  objectPosition?: string;
+  brochureFile?: string;
   features: string[];
   status?: string;
 }
 
-type BrochureEntry = {
-  fileName: string;
-  normalizedFileName: string;
-  url: string;
-};
+const pdfModules = import.meta.glob("/pdfs/*.pdf", {
+  eager: true,
+  import: "default"
+}) as Record<string, string>;
 
-const brochureFiles: BrochureEntry[] = Object.entries(
-  import.meta.glob("/pdfs/*.pdf", {
-    eager: true,
-    import: "default"
-  })
-).map(([filePath, fileUrl]) => {
-  const fileName = filePath.split("/").pop() ?? "";
-  return {
-    fileName,
-    normalizedFileName: normalizeText(fileName.replace(/\.pdf$/i, "")),
-    url: fileUrl as string
-  };
-});
-
-function normalizeText(value: string) {
-  return value.toLowerCase().replace(/[^a-z0-9]+/g, "");
-}
-
-function findBrochureByProjectName(projectTitle: string) {
-  const normalizedProjectName = normalizeText(projectTitle);
-  return brochureFiles.find((brochure) =>
-    brochure.normalizedFileName.includes(normalizedProjectName) ||
-    normalizedProjectName.includes(brochure.normalizedFileName)
-  ) ?? null;
+function findBrochureByFileName(fileName: string): { url: string; fileName: string } | null {
+  const key = `/pdfs/${fileName}`;
+  const url = pdfModules[key];
+  if (!url) return null;
+  return { url, fileName };
 }
 
 const projects: Project[] = [
@@ -54,6 +37,7 @@ const projects: Project[] = [
     type: "Apartments",
     location: "Lanco Hills, Khajaguda",
     image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=800&auto=format&fit=crop",
+    brochureFile: "Arka.pdf",
     features: [
       "9.25 acres, 75% open space",
       "6 towers, 4 cellars, 43 floors",
@@ -69,6 +53,7 @@ const projects: Project[] = [
     type: "Apartments",
     location: "Miyapur",
     image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=800&auto=format&fit=crop",
+    brochureFile: "NYLA_Brochure_Big.pdf",
     features: [
       "6.02 acres, 3 towers, 35 floors",
       "2, 2.5, 3 BHK (1200 – 1800 sq ft)",
@@ -82,6 +67,7 @@ const projects: Project[] = [
     type: "Apartments",
     location: "Miyapur",
     image: "https://images.unsplash.com/photo-1574362848149-11496d93a7c7?q=80&w=800&auto=format&fit=crop",
+    brochureFile: "ARIA.pdf",
     features: [
       "12+ acres, 7 towers (G+48)",
       "3.5 acres amenities",
@@ -97,6 +83,7 @@ const projects: Project[] = [
     type: "Apartments",
     location: "Ananda Prosper, Tellapur",
     image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=800&auto=format&fit=crop",
+    brochureFile: "The_Sky 49_By_Ananda Prosper Projects.pdf",
     features: [
       "Premium High-Rise Apartments",
       "Modern amenities",
@@ -109,6 +96,7 @@ const projects: Project[] = [
     type: "Apartments",
     location: "Ananda Prosper, Manikonda (Road No. 30)",
     image: "https://images.unsplash.com/photo-1515263487990-61b07816b324?q=80&w=800&auto=format&fit=crop",
+    brochureFile: "Drizzle Mini Brochure-compressed.pdf",
     features: [
       "2, 2.5, 3 BHK",
       "G+16 floors, 2 clubhouses",
@@ -123,6 +111,7 @@ const projects: Project[] = [
     type: "Apartments",
     location: "Narsingi",
     image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=800&auto=format&fit=crop",
+    brochureFile: "EL-DORADO-22-07-2022-FINAL-1-1-compressed-1-1-1-1-1-3.pdf",
     features: [
       "4.25 acres, 3 cellars, 40 floors",
       "2 towers",
@@ -136,6 +125,7 @@ const projects: Project[] = [
     type: "Apartments",
     location: "Kondapur",
     image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=800&auto=format&fit=crop",
+    brochureFile: "hallmark altus.pdf",
     features: [
       "3 & 4 BHK ultra premium",
       "3.5 acres, 490 units",
@@ -150,6 +140,7 @@ const projects: Project[] = [
     type: "Apartments",
     location: "Golden Mile Road, Kokapet",
     image: "https://images.unsplash.com/photo-1574362848149-11496d93a7c7?q=80&w=800&auto=format&fit=crop",
+    brochureFile: "Trilight.pdf",
     features: [
       "4.4 acres, 3 towers (56F, 46F, 49F)",
       "462 premium residences",
@@ -163,6 +154,7 @@ const projects: Project[] = [
     type: "Apartments",
     location: "Neopolis",
     image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=800&auto=format&fit=crop",
+    brochureFile: "rise.pdf",
     features: [
       "3.6 acres, 390 units",
       "2 iconic towers (56 floors)",
@@ -178,6 +170,7 @@ const projects: Project[] = [
     type: "Apartments",
     location: "Neopolis",
     image: "https://images.unsplash.com/photo-1515263487990-61b07816b324?q=80&w=800&auto=format&fit=crop",
+    brochureFile: "neo.pdf",
     features: [
       "57-floor iconic towers",
       "3 & 4 BHK (2835 – 4565 sq ft)",
@@ -191,6 +184,7 @@ const projects: Project[] = [
     type: "Apartments",
     location: "Puppalaguda",
     image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=800&auto=format&fit=crop",
+    brochureFile: "Encanto.pdf",
     features: [
       "5.7 acres, 2 towers, 60 floors",
       "4055 – 5045 sq ft",
@@ -205,6 +199,7 @@ const projects: Project[] = [
     type: "Apartments",
     location: "Narsingi",
     image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=800&auto=format&fit=crop",
+    brochureFile: "Vasavi_Atlantis_pdf.pdf",
     features: [
       "12.24 acres, 8 towers, 45 floors",
       "2199 units",
@@ -219,7 +214,9 @@ const projects: Project[] = [
     title: "The Habitat",
     type: "Villas",
     location: "Prosper (Tellapur / Tukkuguda)",
-    image: "https://images.unsplash.com/photo-1613490900233-141c5560d75d?q=80&w=800&auto=format&fit=crop",
+    image: "/habitat-villa.jpg",
+    objectPosition: "center 40%",
+    brochureFile: "The Habitat Brochure.pdf",
     features: [
       "520-acre township, 7 gated communities",
       "30-acre enclave, 250 villas (200–500 sq yards)",
@@ -230,28 +227,132 @@ const projects: Project[] = [
   },
   {
     id: 14,
-    title: "One Ventures – Tripura Villas",
+    title: "Achyuta Villas",
     type: "Villas",
     location: "Tukkuguda",
     image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800&auto=format&fit=crop",
     features: [
-      "Luxury 4BHK triplex villas (87 units)",
+      "Sree Venkateshwara Infra project",
+      "Luxury 4BHK triplex villas (87 exclusive units)",
       "7.5 acres gated community",
-      "267 – 333 sq yards",
-      "EV-ready + smart home provisions"
+      "Plot sizes: 267 – 333 sq yards",
+      "EV-ready & smart home provisions"
     ],
     status: "Possession: March 2028"
   },
   {
     id: 15,
-    title: "Nature’s Edge Signatures",
+    title: "Nature's Edge Signatures",
     type: "Villas",
     location: "Signature Avenues",
     image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=800&auto=format&fit=crop",
+    brochureFile: "Nature's EDGE_Brochure.pdf",
     features: [
       "13.6 acres, 121 villas",
       "300 – 350 sq yards",
       "20K sq ft clubhouse"
+    ]
+  },
+
+  {
+    id: 17,
+    title: "The Woods – Ankura Homes",
+    type: "Villas",
+    location: "Keesara ORR Exit 8 (15 mins)",
+    image: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=800&auto=format&fit=crop",
+    features: [
+      "20+ acres, 50+ units",
+      "1210 sq. yds private plot + 1210 sft villa",
+      "1 acre lifestyle amenity",
+      "Grow your own food concept",
+      "Farm-to-table living experience"
+    ]
+  },
+  {
+    id: 18,
+    title: "Konak – Ankura Homes",
+    type: "Villas",
+    location: "Shankarpally",
+    image: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=800&auto=format&fit=crop",
+    features: [
+      "Phase 1: 22 acres, 64 mansions",
+      "Phase 2: 16 acres, 56 mansions",
+      "900 sq. yds statement mansions",
+      "Built-up: 5100 / 5600 sft",
+      "80% open spaces, mango orchard",
+      "Outdoor party area & barbecue"
+    ]
+  },
+  {
+    id: 19,
+    title: "Breeze in the Courtyard – Ankura",
+    type: "Apartments",
+    location: "Hyderabad",
+    image: "https://images.unsplash.com/photo-1567496898669-ee935f5f647a?q=80&w=800&auto=format&fit=crop",
+    features: [
+      "G+10 towers, 3 blocks (A, B, C)",
+      "290 units, 2 basements",
+      "7-level clubhouse",
+      "Unit sizes: 1695 – 2930 sft",
+      "Open spaces & community experience"
+    ]
+  },
+  {
+    id: 20,
+    title: "Mithila Nagari – Sree Infra",
+    type: "Apartments",
+    location: "Edulanagulapally",
+    image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=800&auto=format&fit=crop",
+    features: [
+      "4+ acres, 597 homes, 3 towers",
+      "2 & 3 BHK (1479 – 2583 sft)",
+      "25 floors + 4 levels parking",
+      "5-level clubhouse (32.6K sft)",
+      "80+ amenities, open restaurant & café",
+      "No industrial zone within 2 km"
+    ]
+  },
+  {
+    id: 21,
+    title: "Urban Trilla – Apartments",
+    type: "Apartments",
+    location: "Mokila",
+    image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=800&auto=format&fit=crop",
+    features: [
+      "2.9 acres, 3 blocks, 8 floors each",
+      "136 luxury apartments (4 BHK)",
+      "Sizes: 2627 – 3897 sft",
+      "5-floor clubhouse (21,000 sft)",
+      "1 central courtyard"
+    ]
+  },
+  {
+    id: 22,
+    title: "Urban Trilla – Farm Villas",
+    type: "Villas",
+    location: "Shankarpally",
+    image: "https://images.unsplash.com/photo-1484154218962-a197022b5858?q=80&w=800&auto=format&fit=crop",
+    features: [
+      "60+ acres, 200+ weekend homes",
+      "Plot: 605 / 1200 sq. yds",
+      "Built-up: 5000+ / 10000+ sft",
+      "90% open spaces, urban farming",
+      "3.8+ acres clubhouse, central park",
+      "No industrial zone within 2 km"
+    ]
+  },
+  {
+    id: 23,
+    title: "19 On West Villas – Duleva Homes",
+    type: "Villas",
+    location: "Shankarpally",
+    image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=800&auto=format&fit=crop",
+    features: [
+      "10 acres, 94 villas",
+      "Plot: 250 – 300 sq. yds",
+      "Built-up: 3260 – 3960 sft",
+      "5 BHK triplex villas",
+      "40% open spaces, EV charging points"
     ]
   },
 
@@ -262,6 +363,7 @@ const projects: Project[] = [
     type: "Commercial",
     location: "Kokapet",
     image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=800&auto=format&fit=crop",
+    brochureFile: "Diamond tower_Floor plans_Brochure.pdf",
     features: [
       "Premium workspace (Skywalk concept)",
       "G+27 floors, 3.81 acres",
@@ -275,6 +377,7 @@ const projects: Project[] = [
 ];
 
 export function Projects() {
+  const [searchParams] = useSearchParams();
   const [activeFilter, setActiveFilter] = useState<ProjectType>("All");
   const [showPopup, setShowPopup] = useState(false);
   const [hasDownloaded, setHasDownloaded] = useState(false);
@@ -287,6 +390,14 @@ export function Projects() {
     }
   }, []);
 
+  useEffect(() => {
+    const typeParam = searchParams.get("type") as ProjectType | null;
+    if (typeParam && ["All", "Apartments", "Villas", "Commercial"].includes(typeParam)) {
+      setActiveFilter(typeParam);
+    }
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [searchParams]);
+
   const filters: ProjectType[] = ["All", "Apartments", "Villas", "Commercial"];
 
   const filteredProjects = activeFilter === "All" 
@@ -294,13 +405,15 @@ export function Projects() {
     : projects.filter(p => p.type === activeFilter);
 
   const downloadBrochureForProject = (project: Project) => {
-    const brochure = findBrochureByProjectName(project.title);
-
-    if (!brochure) {
-      alert(`No brochure file found for ${project.title}.`);
+    if (!project.brochureFile) {
+      alert(`No brochure available for ${project.title} yet.`);
       return;
     }
-
+    const brochure = findBrochureByFileName(project.brochureFile);
+    if (!brochure) {
+      alert(`Brochure file not found for ${project.title}.`);
+      return;
+    }
     const link = document.createElement("a");
     link.href = brochure.url;
     link.download = brochure.fileName;
@@ -326,10 +439,42 @@ export function Projects() {
     const name = formData.get('name');
     const email = formData.get('email');
     const phone = formData.get('phone');
+    const budget = formData.get('budget') || 'Not specified';
+    const size = formData.get('size') || 'Not specified';
     const message = formData.get('message') || 'No message provided.';
 
-    const subject = `Bhaavya Reality - ${name}`;
-    const body = `Brochure Request: ${selectedProject?.title}%0D%0A%0D%0AName: ${name}%0D%0AEmail: ${email}%0D%0APhone: ${phone}%0D%0A%0D%0AMessage:%0D%0A${message}`;
+    const subject = `New Property Enquiry – ${selectedProject?.title} | ${name}`;
+    const body =
+      `Dear Satharla Bhanu Prakash,%0D%0A%0D%0A` +
+      `Greetings!%0D%0A%0D%0A` +
+      `Hi Bhanu, I've gone through your projects and I'm interested. Can we discuss further?%0D%0A%0D%0A` +
+      `I came across Bhaavya Realty and would like to know more details about the project mentioned below. I look forward to your guidance.%0D%0A%0D%0A` +
+      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━%0D%0A` +
+      `  PROJECT OF INTEREST%0D%0A` +
+      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━%0D%0A` +
+      `  Project Name   : ${selectedProject?.title}%0D%0A%0D%0A` +
+      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━%0D%0A` +
+      `  APPLICANT DETAILS%0D%0A` +
+      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━%0D%0A` +
+      `  Full Name      : ${name}%0D%0A` +
+      `  Email Address  : ${email}%0D%0A` +
+      `  Contact Number : ${phone}%0D%0A%0D%0A` +
+      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━%0D%0A` +
+      `  INVESTMENT REQUIREMENTS%0D%0A` +
+      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━%0D%0A` +
+      `  Budget Range   : ${budget}%0D%0A` +
+      `  Preferred Size : ${size}%0D%0A%0D%0A` +
+      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━%0D%0A` +
+      `  REMARKS%0D%0A` +
+      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━%0D%0A` +
+      `  ${message}%0D%0A%0D%0A` +
+      `I look forward to a positive response. Kindly feel free to contact me at your convenience.%0D%0A%0D%0A` +
+      `Thanking You,%0D%0A` +
+      `${name}%0D%0A` +
+      `📞 ${phone}%0D%0A` +
+      `✉  ${email}%0D%0A%0D%0A` +
+      `─────────────────────────────%0D%0A` +
+      `This enquiry was submitted via bhaavyarealty.com`;
 
     window.open(`mailto:bhaavyarealty@gmail.com?subject=${subject}&body=${body}`, '_blank');
 
@@ -349,30 +494,15 @@ export function Projects() {
       <div className="container mx-auto px-6 md:px-12">
         
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-5xl font-serif text-gray-900 mb-6"
-          >
+          <h1 className="text-5xl font-serif text-gray-900 mb-6">
             Our Portfolio
-          </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-gray-600 text-lg font-light"
-          >
+          </h1>
+          <p className="text-gray-600 text-lg font-light">
             Explore our curated collection of premium real estate developments, designed with precision and built for the future.
-          </motion.p>
+          </p>
         </div>
 
-        {/* Filters */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="flex flex-wrap justify-center gap-4 mb-16"
-        >
+        <div className="flex flex-wrap justify-center gap-4 mb-16">
           {filters.map((filter) => (
             <button
               key={filter}
@@ -386,16 +516,13 @@ export function Projects() {
               {filter}
             </button>
           ))}
-        </motion.div>
+        </div>
 
         {/* Projects Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {filteredProjects.map((project, index) => (
-            <motion.div
+          {filteredProjects.map((project) => (
+            <div
               key={project.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.05 }}
               className="group bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-xl hover:border-primary/30 transition-all duration-300 flex flex-col"
             >
               <div className="relative h-64 overflow-hidden flex-shrink-0">
@@ -403,6 +530,7 @@ export function Projects() {
                   src={project.image} 
                   alt={project.title} 
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  style={{ objectPosition: project.objectPosition ?? "center" }}
                   referrerPolicy="no-referrer"
                 />
                 <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 text-xs uppercase tracking-widest text-primary font-semibold rounded-full shadow-sm">
@@ -442,7 +570,7 @@ export function Projects() {
                   <span>Download Brochure</span>
                 </button>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
 
@@ -454,7 +582,7 @@ export function Projects() {
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-white rounded-3xl p-8 max-w-md w-full relative shadow-2xl border border-gray-200"
+            className="bg-white rounded-3xl p-8 max-w-md w-full relative shadow-2xl border border-gray-200 max-h-[90vh] overflow-y-auto"
           >
             <button 
               onClick={() => setShowPopup(false)} 
@@ -477,6 +605,27 @@ export function Projects() {
               </div>
               <div>
                 <input type="tel" name="phone" placeholder="Phone *" required className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" />
+              </div>
+              <div>
+                <select name="budget" required className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all appearance-none">
+                  <option value="" disabled selected>Budget Range *</option>
+                  <option value="1-2 Cr">₹1 Cr – ₹2 Cr</option>
+                  <option value="2-3 Cr">₹2 Cr – ₹3 Cr</option>
+                  <option value="3-4 Cr">₹3 Cr – ₹4 Cr</option>
+                  <option value="4-5 Cr">₹4 Cr – ₹5 Cr</option>
+                  <option value="Above 5 Cr">Above ₹5 Cr</option>
+                </select>
+              </div>
+              <div>
+                <select name="size" required className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all appearance-none">
+                  <option value="" disabled selected>Preferred Size (sqft) *</option>
+                  <option value="1200-1500 sqft">1200 – 1500 sqft</option>
+                  <option value="1500-1800 sqft">1500 – 1800 sqft</option>
+                  <option value="1800-2100 sqft">1800 – 2100 sqft</option>
+                  <option value="2100-2500 sqft">2100 – 2500 sqft</option>
+                  <option value="2500-3000 sqft">2500 – 3000 sqft</option>
+                  <option value="Above 3000 sqft">Above 3000 sqft</option>
+                </select>
               </div>
               <div>
                 <textarea name="message" placeholder="Message (Optional)" rows={3} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"></textarea>
