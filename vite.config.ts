@@ -5,7 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 const isProduction = process.env.NODE_ENV === 'production';
 
 export default defineConfig({
-  base: isProduction ? '/baavya-realty/' : '/',
+  base: '/',
   plugins: [react(), tailwindcss()],
   server: {
     port: 3000,

@@ -33,7 +33,7 @@ function ScrollToHash() {
 
 export default function App() {
   return (
-    <Router basename={import.meta.env.BASE_URL}>
+    <Router basename="/">
       <ScrollToHash />
       <div className="flex flex-col min-h-screen bg-dark text-gray-100">
         <Navbar />
