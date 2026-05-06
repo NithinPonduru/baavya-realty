@@ -214,7 +214,7 @@ const projects: Project[] = [
     title: "The Habitat",
     type: "Villas",
     location: "Prosper (Tellapur / Tukkuguda)",
-    image: "/habitat-villa.jpg",
+    image: `${import.meta.env.BASE_URL}habitat-villa.jpg`,
     objectPosition: "center 40%",
     brochureFile: "The Habitat Brochure.pdf",
     features: [

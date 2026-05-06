@@ -11,7 +11,7 @@ export function Home() {
           <img 
             alt="Luxury Property" 
             className="w-full h-full object-cover" 
-            src="/hero-realestate.png"
+            src={`${import.meta.env.BASE_URL}hero-realestate.png`}
           />
           <div className="absolute inset-0 bg-gradient-to-r from-teal-900/95 via-cyan-900/90 to-blue-900/85"></div>
           <div className="absolute top-20 left-10 w-72 h-72 bg-teal-500/20 rounded-full blur-3xl animate-pulse"></div>
