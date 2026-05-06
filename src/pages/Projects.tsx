@@ -37,7 +37,7 @@ const projects: Project[] = [
     type: "Apartments",
     location: "Lanco Hills, Khajaguda",
     image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=800&auto=format&fit=crop",
-    brochureFile: "Arka.pdf",
+    brochureFile: "https://drive.google.com/file/d/1XNHXS9FTjP2ImeR0qaODYXjTbItOMJzw/view?usp=share_link",
     features: [
       "9.25 acres, 75% open space",
       "6 towers, 4 cellars, 43 floors",
@@ -67,7 +67,7 @@ const projects: Project[] = [
     type: "Apartments",
     location: "Miyapur",
     image: "https://images.unsplash.com/photo-1574362848149-11496d93a7c7?q=80&w=800&auto=format&fit=crop",
-    brochureFile: "ARIA.pdf",
+    brochureFile: "https://drive.google.com/file/d/1k_D5g4EkZ7X6LI3yVnvBbngzyHX545qS/view?usp=share_link",
     features: [
       "12+ acres, 7 towers (G+48)",
       "3.5 acres amenities",
@@ -125,7 +125,7 @@ const projects: Project[] = [
     type: "Apartments",
     location: "Kondapur",
     image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=800&auto=format&fit=crop",
-    brochureFile: "hallmark altus.pdf",
+    brochureFile: "https://drive.google.com/file/d/1XNHXS9FTjP2ImeR0qaODYXjTbItOMJzw/view?usp=share_link",
     features: [
       "3 & 4 BHK ultra premium",
       "3.5 acres, 490 units",
@@ -140,7 +140,7 @@ const projects: Project[] = [
     type: "Apartments",
     location: "Golden Mile Road, Kokapet",
     image: "https://images.unsplash.com/photo-1574362848149-11496d93a7c7?q=80&w=800&auto=format&fit=crop",
-    brochureFile: "Trilight.pdf",
+    brochureFile: "https://drive.google.com/file/d/1XNHXS9FTjP2ImeR0qaODYXjTbItOMJzw/view?usp=share_link",
     features: [
       "4.4 acres, 3 towers (56F, 46F, 49F)",
       "462 premium residences",
@@ -184,7 +184,7 @@ const projects: Project[] = [
     type: "Apartments",
     location: "Puppalaguda",
     image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=800&auto=format&fit=crop",
-    brochureFile: "Encanto.pdf",
+    brochureFile: "https://drive.google.com/file/d/1lrL1n2lU8lnMqHcOhOlgLKCEAtSK9jY9/view?usp=share_link",
     features: [
       "5.7 acres, 2 towers, 60 floors",
       "4055 – 5045 sq ft",
@@ -409,6 +409,13 @@ export function Projects() {
       alert(`No brochure available for ${project.title} yet.`);
       return;
     }
+
+    // Handle external links (Google Drive, etc.)
+    if (project.brochureFile.startsWith("http")) {
+      window.open(project.brochureFile, "_blank");
+      return;
+    }
+
     const brochure = findBrochureByFileName(project.brochureFile);
     if (!brochure) {
       alert(`Brochure file not found for ${project.title}.`);
