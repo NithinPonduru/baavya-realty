@@ -9,11 +9,14 @@ export function Footer() {
         <div className="flex flex-col lg:flex-row justify-between items-start gap-8 mb-8 border-b border-slate-800 pb-8">
           <div className="max-w-md">
             <Link to="/" className="flex items-center gap-3 mb-2" aria-label="Bhaavya Realty home">
-              <img
-                src={`${import.meta.env.BASE_URL}logo.png`}
-                alt="Bhaavya Realty logo"
-                className="h-10 w-10 object-contain"
-              />
+              {/* White rounded badge so logo looks clean on dark background */}
+              <div className="bg-white rounded-xl p-1 flex-shrink-0 shadow-md">
+                <img
+                  src={`${import.meta.env.BASE_URL}logo.png`}
+                  alt="Bhaavya Realty logo"
+                  className="h-8 w-8 object-contain [mix-blend-mode:multiply]"
+                />
+              </div>
               <span className="text-2xl font-serif tracking-widest text-white uppercase">
                 Bhaavya <span className="text-teal-500">Realty</span>
               </span>

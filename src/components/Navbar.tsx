@@ -37,11 +37,23 @@ export function Navbar() {
       >
         <div className="container mx-auto px-6 md:px-12 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3" aria-label="Bhaavya Realty home">
-            <img
-              src={`${import.meta.env.BASE_URL}logo.png`}
-              alt="Bhaavya Realty logo"
-              className="h-10 w-10 object-contain"
-            />
+            {/* Logo: mix-blend-mode:multiply on light bg makes white disappear;
+                on dark hero we wrap in a white rounded badge for clean appearance */}
+            <div className={cn(
+              "flex-shrink-0 transition-all duration-300",
+              isDark
+                ? "bg-white rounded-xl p-0.5"
+                : "bg-white/15 backdrop-blur-sm rounded-xl p-0.5"
+            )}>
+              <img
+                src={`${import.meta.env.BASE_URL}logo.png`}
+                alt="Bhaavya Realty logo"
+                className={cn(
+                  "h-9 w-9 object-contain rounded-lg transition-all duration-300",
+                  isDark && "[mix-blend-mode:multiply]"
+                )}
+              />
+            </div>
             <span className={cn("text-xl font-serif tracking-widest uppercase hidden sm:block", isDark ? "text-gray-900" : "text-white")}>
               Bhaavya <span className="text-primary">Realty</span>
             </span>
