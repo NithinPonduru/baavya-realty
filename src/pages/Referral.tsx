@@ -6,6 +6,7 @@ import {
   ArrowRight, Phone
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useSEO, buildBreadcrumbSchema } from "../lib/useSEO";
 
 const rewardTiers = [
   {
@@ -178,6 +179,16 @@ function TermsAccordion({ item }: { item: typeof termsData[0] }) {
 }
 
 export function Referral() {
+  useSEO({
+    title: "Referral Program – Earn Up to ₹29,999 Per Referral",
+    description: "Refer a property buyer to Bhaavya Realty and earn up to ₹29,999 per successful referral. Bonus rewards for multiple referrals. Easy, transparent, and fast payouts.",
+    canonicalPath: "/referral",
+    jsonLd: buildBreadcrumbSchema([
+      { name: "Home", path: "/" },
+      { name: "Referral Program", path: "/referral" },
+    ]),
+  });
+
   return (
     <div className="min-h-screen bg-white">
 

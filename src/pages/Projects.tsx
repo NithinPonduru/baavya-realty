@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { motion } from "motion/react";
 import { Download, MapPin, CheckCircle2, CalendarDays, X } from "lucide-react";
+import { useSEO, buildBreadcrumbSchema } from "../lib/useSEO";
 
 type ProjectType = "All" | "Apartments" | "Villas" | "Commercial";
 
@@ -377,6 +378,16 @@ const projects: Project[] = [
 ];
 
 export function Projects() {
+  useSEO({
+    title: "Our Portfolio – Premium Real Estate Projects in Hyderabad",
+    description: "Browse Bhaavya Realty's curated portfolio of luxury apartments, villas & commercial spaces across Hyderabad — including Kokapet, Kondapur, Miyapur, Narsingi & more.",
+    canonicalPath: "/projects",
+    jsonLd: buildBreadcrumbSchema([
+      { name: "Home", path: "/" },
+      { name: "Projects", path: "/projects" },
+    ]),
+  });
+
   const [searchParams] = useSearchParams();
   const [activeFilter, setActiveFilter] = useState<ProjectType>("All");
   const [showPopup, setShowPopup] = useState(false);
@@ -509,14 +520,16 @@ export function Projects() {
           </p>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-4 mb-16">
+        <div role="region" aria-label="Project filter controls" className="flex flex-wrap justify-center gap-4 mb-16">
           {filters.map((filter) => (
             <button
               key={filter}
               onClick={() => setActiveFilter(filter)}
+              aria-pressed={activeFilter === filter}
+              aria-label={`Filter projects: ${filter}`}
               className={`px-6 py-2 text-sm uppercase tracking-wider transition-all duration-300 border rounded-full ${
-                activeFilter === filter 
-                  ? "border-primary bg-primary text-white font-semibold shadow-md" 
+                activeFilter === filter
+                  ? "border-primary bg-primary text-white font-semibold shadow-md"
                   : "border-gray-300 text-gray-600 hover:border-primary hover:text-primary bg-white"
               }`}
             >
@@ -526,18 +539,22 @@ export function Projects() {
         </div>
 
         {/* Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div role="list" aria-label="Property listings" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           {filteredProjects.map((project) => (
-            <div
+            <article
               key={project.id}
-              className="group bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-xl hover:border-primary/30 transition-all duration-300 flex flex-col"
+              role="listitem"
+              aria-label={`${project.title} — ${project.type} in ${project.location}`}
+              className="group bg-white rounded-2xl border-2 border-gray-200 overflow-hidden hover:shadow-xl hover:border-primary/50 transition-all duration-300 flex flex-col"
             >
               <div className="relative h-64 overflow-hidden flex-shrink-0">
-                <img 
-                  src={project.image} 
-                  alt={project.title} 
+                <img
+                  src={project.image}
+                  alt={`${project.title} — ${project.type} for sale in ${project.location}, Hyderabad`}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   style={{ objectPosition: project.objectPosition ?? "center" }}
+                  loading="lazy"
+                  decoding="async"
                   referrerPolicy="no-referrer"
                 />
                 <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 text-xs uppercase tracking-widest text-primary font-semibold rounded-full shadow-sm">
@@ -577,7 +594,7 @@ export function Projects() {
                   <span>Download Brochure</span>
                 </button>
               </div>
-            </div>
+              </article>
           ))}
         </div>
 

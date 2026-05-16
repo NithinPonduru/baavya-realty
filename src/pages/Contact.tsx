@@ -1,8 +1,19 @@
 import React from "react";
 import { motion } from "motion/react";
 import { Phone, Mail, MapPin, Clock, MessageCircle } from "lucide-react";
+import { useSEO, buildBreadcrumbSchema } from "../lib/useSEO";
 
 export function Contact() {
+  useSEO({
+    title: "Contact Us – Book a Free Real Estate Consultation",
+    description: "Get in touch with Bhaavya Realty in Manikonda, Hyderabad. Book a free consultation, call +91 81798 88986, or WhatsApp us. We help you find the perfect property.",
+    canonicalPath: "/contact",
+    jsonLd: buildBreadcrumbSchema([
+      { name: "Home", path: "/" },
+      { name: "Contact", path: "/contact" },
+    ]),
+  });
+
   const handleConsultationSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -163,7 +174,7 @@ export function Contact() {
               </h4>
               <p className="text-gray-600 text-sm mb-6">Quick response guaranteed</p>
               <a 
-                href="https://wa.me/918179888986?text=Hey%20Bhanu" 
+                href="https://wa.me/918179888986?text=Hi%20Bhanu%20Prakash%2CI%27ve%20gone%20through%20one%20of%20your%20projects%20and%20I%27m%20interested.%20Can%20we%20discuss%20further%3F"
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center w-full bg-green-500 text-white font-semibold py-4 rounded-xl hover:bg-green-600 transition-colors shadow-lg shadow-green-500/30"

@@ -1,17 +1,71 @@
 import { motion } from "motion/react";
-import { ArrowRight, Building, Home as HomeIcon, Map, Briefcase, Sparkles, MapPin, ShieldCheck, ClipboardList, HandHelping, TrendingUp } from "lucide-react";
+import { ArrowRight, Building, Home as HomeIcon, Map, Briefcase, Sparkles, MapPin, ShieldCheck, ClipboardList, HandHelping, TrendingUp, ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useSEO, buildBreadcrumbSchema } from "../lib/useSEO";
+
+const faqs = [
+  {
+    q: "What areas does Bhaavya Realty cover in Hyderabad?",
+    a: "Bhaavya Realty covers all major real estate corridors in Hyderabad including Manikonda, Kokapet, Kondapur, Miyapur, Narsingi, Puppalaguda, Shankarpally, and Tellapur.",
+  },
+  {
+    q: "What types of properties does Bhaavya Realty offer?",
+    a: "We offer luxury apartments (2, 3 & 4 BHK), independent villas, township plots, and premium commercial spaces across Hyderabad's most sought-after localities.",
+  },
+  {
+    q: "Is the consultation with Bhaavya Realty free?",
+    a: "Yes, Bhaavya Realty offers a completely free property consultation. You can book a call, WhatsApp us, or visit our office in Manikonda, Hyderabad.",
+  },
+  {
+    q: "How does the Bhaavya Realty referral program work?",
+    a: "Refer a property buyer to us and earn up to ₹29,999 per successful deal. The referral amount is credited within 2–7 working days after the Agreement of Sale is executed.",
+  },
+  {
+    q: "What is the minimum budget for properties listed by Bhaavya Realty?",
+    a: "Our portfolio spans a wide range, from 2 BHK apartments starting around ₹1 crore to ultra-luxury sky mansions and villas above ₹5 crore in prime Hyderabad locations.",
+  },
+  {
+    q: "Does Bhaavya Realty help with home loans?",
+    a: "Yes, we connect clients with trusted banking partners and financial advisors to assist with home loan eligibility, documentation, and disbursement.",
+  },
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: f.a,
+    },
+  })),
+};
 
 export function Home() {
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+  useSEO({
+    title: "Luxury Real Estate Advisory in Hyderabad",
+    description: "Bhaavya Realty – Buy premium 2, 3 & 4 BHK apartments, luxury villas & commercial spaces in Kokapet, Kondapur, Manikonda & Narsingi. Expert advisory. Book a FREE consultation — +91 81798 88986.",
+    canonicalPath: "/",
+    jsonLd: [buildBreadcrumbSchema([{ name: "Home", path: "/" }]), faqSchema],
+  });
+
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section id="hero" className="relative min-h-screen flex items-center overflow-hidden">
+      <section id="hero" aria-label="Hero — Bhaavya Realty" className="relative min-h-screen flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <img 
-            alt="Luxury Property" 
-            className="w-full h-full object-cover" 
+          <img
             src={`${import.meta.env.BASE_URL}hero-realestate.png`}
+            alt="Luxury real estate in Hyderabad — Bhaavya Realty hero image showing premium property"
+            className="w-full h-full object-cover"
+            loading="eager"
+            fetchPriority="high"
+            decoding="sync"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-teal-900/95 via-cyan-900/90 to-blue-900/85"></div>
           <div className="absolute top-20 left-10 w-72 h-72 bg-teal-500/20 rounded-full blur-3xl animate-pulse"></div>
@@ -92,7 +146,7 @@ export function Home() {
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-24 bg-white overflow-hidden">
+      <section id="about" aria-label="About our founder" className="py-24 bg-white overflow-hidden">
         <div className="container mx-auto px-6 md:px-12">
           <motion.div 
             initial={{ opacity: 0, y: 40 }}
@@ -120,7 +174,7 @@ export function Home() {
       </section>
 
       {/* Why Choose Us */}
-      <section id="why-choose-us" className="py-24 bg-white overflow-hidden">
+      <section id="why-choose-us" aria-label="Why choose Bhaavya Realty" className="py-24 bg-white overflow-hidden">
         <div className="container mx-auto px-6 md:px-12">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -197,7 +251,7 @@ export function Home() {
       </section>
 
       {/* Expertise / Project Types */}
-      <section id="services" className="py-24 bg-gray-50 overflow-hidden">
+      <section id="services" aria-label="Real estate services and project types" className="py-24 bg-gray-50 overflow-hidden">
         <div className="container mx-auto px-6 md:px-12">
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
@@ -229,6 +283,69 @@ export function Home() {
                 </div>
               </Link>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section — Content SEO + FAQ Schema */}
+      <section id="faq" aria-label="Frequently asked questions about Bhaavya Realty" className="py-24 bg-white overflow-hidden">
+        <div className="container mx-auto px-6 md:px-12 max-w-3xl">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-14"
+          >
+            <h2 className="text-sm text-primary uppercase tracking-[0.3em] mb-4 font-semibold">Got Questions?</h2>
+            <h3 className="text-3xl md:text-4xl font-serif text-gray-900">Frequently Asked Questions</h3>
+            <div className="w-12 h-0.5 bg-primary mx-auto rounded-full mt-4" />
+          </motion.div>
+
+          <div className="space-y-3">
+            {faqs.map((faq, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.06 }}
+                className={`border rounded-xl overflow-hidden transition-all duration-300 ${
+                  openFaq === i ? "border-teal-300 shadow-sm" : "border-gray-200"
+                }`}
+              >
+                <button
+                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                  aria-expanded={openFaq === i}
+                  className="w-full flex items-center justify-between px-5 py-4 text-left bg-white hover:bg-teal-50/40 transition-colors duration-200"
+                >
+                  <span className="font-medium text-gray-900 pr-4">{faq.q}</span>
+                  <motion.span
+                    animate={{ rotate: openFaq === i ? 180 : 0 }}
+                    transition={{ duration: 0.25 }}
+                    className="flex-shrink-0"
+                  >
+                    <ChevronDown size={18} className="text-gray-400" />
+                  </motion.span>
+                </button>
+                {openFaq === i && (
+                  <div className="px-5 pb-5 pt-1 bg-gray-50 border-t border-gray-100">
+                    <p className="text-gray-600 text-sm leading-relaxed">{faq.a}</p>
+                  </div>
+                )}
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <p className="text-gray-500 text-sm mb-4">Still have questions? We're happy to help.</p>
+            <Link
+              to="/contact"
+              className="inline-flex items-center gap-2 px-8 py-3 bg-primary text-white rounded-full font-semibold hover:bg-primary/90 hover:scale-105 transition-all duration-300 shadow-lg shadow-primary/20"
+            >
+              Contact Us
+              <ArrowRight size={16} />
+            </Link>
           </div>
         </div>
       </section>

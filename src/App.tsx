@@ -11,6 +11,7 @@ import { Home } from "./pages/Home";
 import { Projects } from "./pages/Projects";
 import { Contact } from "./pages/Contact";
 import { Referral } from "./pages/Referral";
+import { NotFound } from "./pages/NotFound";
 
 function ScrollToHash() {
   const { pathname, hash } = useLocation();
@@ -43,6 +44,7 @@ export default function App() {
             <Route path="/projects" element={<Projects />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/referral" element={<Referral />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
         <Footer />
