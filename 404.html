@@ -4,14 +4,21 @@
     <meta charset="UTF-8" />
     <title>Bhaavya Realty</title>
     <script>
-      // GitHub Pages SPA redirect trick.
-      // Encodes the current path/query/hash into a ?p= param on the root URL,
-      // which index.html then decodes and replaces into history so React Router
-      // can handle the route correctly.
+      // GitHub Pages SPA redirect fix.
+      // When GitHub Pages serves this 404.html for an unknown path (e.g. /projects),
+      // we redirect to the root with the original path encoded as ?p=
+      // index.html then reads ?p= and restores the URL via history.replaceState.
+      var segmentCount = 0; // 0 because we use a custom domain (root-level deploy)
       var l = window.location;
       l.replace(
-        l.protocol + '//' + l.host + l.pathname.split('/').slice(0, 1).join('/') +
-        '/?p=' + encodeURIComponent(l.pathname + l.search) + l.hash
+        l.protocol + '//' + l.host + '/' +
+        l.pathname.slice(1).split('/').slice(0, segmentCount).join('/') +
+        (segmentCount ? '/' : '') +
+        '?p=' + encodeURIComponent(
+          '/' + l.pathname.slice(1).split('/').slice(segmentCount).join('/')
+        ) +
+        (l.search ? '&q=' + encodeURIComponent(l.search.slice(1)) : '') +
+        l.hash
       );
     </script>
   </head>

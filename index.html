@@ -121,12 +121,11 @@
       (function () {
         var params = new URLSearchParams(window.location.search);
         var p = params.get('p');
+        var q = params.get('q');
         if (p) {
-          params.delete('p');
-          var remaining = params.toString();
           window.history.replaceState(
             null, null,
-            p + (remaining ? '?' + remaining : '') + window.location.hash
+            p + (q ? '?' + q : '') + window.location.hash
           );
         }
       })();
