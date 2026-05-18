@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Bhaavya Realty</title>
+    <script>
+      // GitHub Pages SPA redirect trick.
+      // Encodes the current path/query/hash into a ?p= param on the root URL,
+      // which index.html then decodes and replaces into history so React Router
+      // can handle the route correctly.
+      var l = window.location;
+      l.replace(
+        l.protocol + '//' + l.host + l.pathname.split('/').slice(0, 1).join('/') +
+        '/?p=' + encodeURIComponent(l.pathname + l.search) + l.hash
+      );
+    </script>
+  </head>
+  <body></body>
+</html>
